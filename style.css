@@ -1,0 +1,65 @@
+@import url('https://rsms.me/inter/inter.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    width: 100vw;
+    background: #F3F5FC;
+}
+
+main {
+    width: 50%;
+    margin: 40px auto;
+    text-align: center;
+}
+
+section {
+    margin: 20px 0 10px;
+}
+
+.palavra span, .letras-erradas span {
+    margin: 0 5px;
+    border-bottom: 2px solid #0a3771;
+    padding: 5px 20px;
+    text-transform: uppercase;
+    font-size: 40px;
+    text-align: center;
+    height: 58px;
+}
+
+.letras-erradas span {
+  border: none;
+}
+
+.forca .letras-erradas {
+    font-size: 20px;
+    margin: 40px 0;
+    color: #495057;
+}
+
+button {
+    border: 1px solid #0a3771;
+    padding: 20px 45px;
+    border-radius: 24px;
+    font-size: 16px;
+    background: #D8DFE8;
+    color: #0a3771;
+    width: 100%;
+}
+
+.botoes {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 45% 45%;
+    justify-content: center;
+}
+
+button:first-child {
+    background-color: #0a3771;
+    color: #fff;
+}
