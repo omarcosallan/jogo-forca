@@ -13,3 +13,7 @@ function board(word) {
 function secretWord() {
     return words[Math.floor(Math.random() * words.length)]; // retorna palavra secreta
 }
+
+function isLetter(code) {
+    return code >= 97 && code <= 122 ? true : false;
+}
