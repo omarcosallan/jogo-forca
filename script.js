@@ -9,3 +9,7 @@ function board(word) {
         board.innerHTML += '<span></span>';
     }
 }
+
+function secretWord() {
+    return words[Math.floor(Math.random() * words.length)]; // retorna palavra secreta
+}
