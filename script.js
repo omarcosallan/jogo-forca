@@ -17,3 +17,11 @@ function secretWord() {
 function isLetter(code) {
     return code >= 97 && code <= 122 ? true : false;
 }
+
+document.getElementById('iniciar-jogo').addEventListener('click', function() {
+    board(secretWord());
+    addEventListener('keypress', function(e) {
+        console.log(e.keyCode);
+        console.log(isLetter(e.keyCode));
+    })
+})
