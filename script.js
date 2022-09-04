@@ -1,6 +1,11 @@
-let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT'];
+let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT']; // palavras
 let wrongLetters = [];
 let rightLetters = [];
+
+const canvas = document.querySelector('canvas'); // canvas
+const brush = canvas.getContext('2d');
+brush.strokeStyle = '#0A3871';
+brush.lineWidth = 2;
 
 const boardEl = document.getElementById('palavra');
 const wrongLettersEl = document.getElementById('letras-erradas');
@@ -23,7 +28,7 @@ function isLetter(code) {
 function checkLetter(letter, word, spans) {
     if (word.includes(letter) && !rightLetters.includes(letter)) {
         checkRightLetters(rightLetters, word, letter, spans)
-    } else if (!word.includes(letter) && !wrongLetters.includes(letter) ) {
+    } else if (!word.includes(letter) && !wrongLetters.includes(letter)) {
         checkWrongLetters(wrongLetters, wrongLettersEl, letter);
     }
 }
@@ -45,9 +50,44 @@ function checkWrongLetters(arrayLetters, wrongLettersEl, letter) { // checa letr
     }
 }
 
+function clearCanvas() {
+    brush.clearRect(0, 0, 600, 300);
+}
+
+//function desenha froca
+function drawGallows() {
+    clearCanvas();
+
+    brush.beginPath();
+    brush.moveTo(200, 290);
+    brush.lineTo(400, 290);
+    brush.stroke();
+
+    brush.beginPath();
+    brush.moveTo(250, 290);
+    brush.lineTo(250, 70);
+    brush.lineTo(380, 70);
+    brush.lineTo(380, 115);
+    brush.stroke();
+}
+
+function drawHead() { 
+    brush.beginPath();
+    brush.arc(380, 135, 20, 0, Math.PI * 2);
+    brush.stroke();
+}
+
+function drawLine(xStar, yStart, xFinal, yFinal) { // desenhas braços, pernas e corpo
+    brush.beginPath();
+    brush.moveTo(xStar, yStart);
+    brush.lineTo(xFinal, yFinal);
+    brush.stroke();
+}
+
 document.getElementById('iniciar-jogo').addEventListener('click', function () {
     const word = secretWord();
     board(word);
+    drawGallows();
     wrongLetters.innerHTML = '';
     const spans = document.querySelectorAll('span');
     addEventListener('keypress', function (e) {
