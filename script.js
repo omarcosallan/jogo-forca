@@ -2,6 +2,7 @@ let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT'];
 let wrongLetters = [];
 let rightLetters = [];
 let attempts;
+let correct;
 
 const start = document.getElementById('iniciar-jogo');
 let word = '';
@@ -38,32 +39,31 @@ function isLetter(code) {
 }
 
 function checkLetter(letter, word, spans) {
-    if (word.includes(letter) && !rightLetters.includes(letter)) {
-        checkRightLetters(rightLetters, word, letter, spans)
-    } else if (!word.includes(letter) && !wrongLetters.includes(letter)) {
-        checkWrongLetters(wrongLetters, wrongLettersEl, letter);
-        return true;
+    if (attempts < 6 && !winner(word)) {
+        if (word.includes(letter) && !rightLetters.includes(letter)) {
+            checkRightLetters(rightLetters, word, letter, spans);
+        } else if (!word.includes(letter) && !wrongLetters.includes(letter)) {
+            checkWrongLetters(wrongLetters, wrongLettersEl, letter);
+            return true;
+        }
     }
 }
 
 function checkRightLetters(arrayLetters, word, letter, spans) {
-    if (attempts < 6) {
-        arrayLetters.push(letter);
-        for (let i = 0; i < word.length; i++) {
-            if (word[i] == letter) {
-                spans[i].textContent = letter;
-            }
+    arrayLetters.push(letter);
+    for (let i = 0; i < word.length; i++) {
+        if (word[i] == letter) {
+            spans[i].textContent = letter;
+            correct++;
         }
     }
 }
 
 function checkWrongLetters(arrayLetters, wrongLettersEl, letter) {
-    if (attempts < 6) {
-        arrayLetters.push(letter);
-        wrongLettersEl.innerHTML = '';
-        for (let i = 0; i < arrayLetters.length; i++) {
-            wrongLettersEl.innerHTML += '<span>' + arrayLetters[i] + '</span>';
-        }
+    arrayLetters.push(letter);
+    wrongLettersEl.innerHTML = '';
+    for (let i = 0; i < arrayLetters.length; i++) {
+        wrongLettersEl.innerHTML += '<span>' + arrayLetters[i] + '</span>';
     }
 }
 
@@ -135,8 +135,8 @@ start.addEventListener('click', function () {
             if (isWrong) {
                 attempts++;
                 gallowsTest(attempts);
-                endGameTest(attempts);
             }
+            endGameTest(attempts, word);
         }
     })
     start.addEventListener('click', function () {
@@ -150,11 +150,21 @@ function newGame() {
     board(word);
     drawGallows();
     attempts = 0;
+    correct = 0;
 }
 
-function endGameTest(attempts) {
+function endGameTest(attempts, word) {
     if (attempts == 6) {
         wrongLettersEl.style.color = 'red';
-        wrongLettersEl.innerHTML += '<br><br>Que pena! É o fim do jogo para você!'
+        wrongLettersEl.innerHTML = 'Que pena! É o fim do jogo para você!';
+    } else if (winner(word)) {
+        wrongLettersEl.style.color = 'green';
+        wrongLettersEl.innerHTML = 'Você venceu.<br>Parabéns!';
+    }
+}
+
+function winner(word) {
+    if (correct == word.length) {
+        return true;
     }
 }
