@@ -47,19 +47,23 @@ function checkLetter(letter, word, spans) {
 }
 
 function checkRightLetters(arrayLetters, word, letter, spans) {
-    arrayLetters.push(letter);
-    for (let i = 0; i < word.length; i++) {
-        if (word[i] == letter) {
-            spans[i].textContent = letter;
+    if (attempts < 6) {
+        arrayLetters.push(letter);
+        for (let i = 0; i < word.length; i++) {
+            if (word[i] == letter) {
+                spans[i].textContent = letter;
+            }
         }
     }
 }
 
 function checkWrongLetters(arrayLetters, wrongLettersEl, letter) {
-    arrayLetters.push(letter);
-    wrongLettersEl.innerHTML = '';
-    for (let i = 0; i < arrayLetters.length; i++) {
-        wrongLettersEl.innerHTML += '<span>' + arrayLetters[i] + '</span>';
+    if (attempts < 6) {
+        arrayLetters.push(letter);
+        wrongLettersEl.innerHTML = '';
+        for (let i = 0; i < arrayLetters.length; i++) {
+            wrongLettersEl.innerHTML += '<span>' + arrayLetters[i] + '</span>';
+        }
     }
 }
 
@@ -83,7 +87,7 @@ function drawGallows() {
     brush.stroke();
 }
 
-function drawHead() { 
+function drawHead() {
     brush.beginPath();
     brush.arc(380, 120, 20, 0, Math.PI * 2);
     brush.stroke();
@@ -131,6 +135,7 @@ start.addEventListener('click', function () {
             if (isWrong) {
                 attempts++;
                 gallowsTest(attempts);
+                endGameTest(attempts);
             }
         }
     })
@@ -145,4 +150,11 @@ function newGame() {
     board(word);
     drawGallows();
     attempts = 0;
+}
+
+function endGameTest(attempts) {
+    if (attempts == 6) {
+        wrongLettersEl.style.color = 'red';
+        wrongLettersEl.innerHTML += '<br><br>Que pena! É o fim do jogo para você!'
+    }
 }
