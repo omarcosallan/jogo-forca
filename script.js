@@ -30,6 +30,7 @@ function checkLetter(letter, word, spans) {
         checkRightLetters(rightLetters, word, letter, spans)
     } else if (!word.includes(letter) && !wrongLetters.includes(letter)) {
         checkWrongLetters(wrongLetters, wrongLettersEl, letter);
+        return true;
     }
 }
 
@@ -84,15 +85,46 @@ function drawLine(xStar, yStart, xFinal, yFinal) { // desenhas braços, pernas e
     brush.stroke();
 }
 
+function gallowsTest(attempts) { // testa quantidade de erros e desenha elemento da forca
+    switch (attempts) {
+        case 0:
+            drawGallows();
+            break;
+        case 1:
+            drawHead(); // cabeça
+            break;
+        case 2:
+            drawLine(380, 155, 380, 210);   // corpo
+            break;
+        case 3:
+            drawLine(380, 155, 350, 175);   // braço esquerdo
+            break;
+        case 4:
+            drawLine(380, 155, 410, 175);   // braço direito
+            break;
+        case 5:
+            drawLine(380, 210, 350, 230);   // perna esquerda
+            break;
+        case 6:
+            drawLine(380, 210, 410, 230);   // perna direita
+            break;
+    }
+}
+
 document.getElementById('iniciar-jogo').addEventListener('click', function () {
     const word = secretWord();
     board(word);
     drawGallows();
     wrongLetters.innerHTML = '';
     const spans = document.querySelectorAll('span');
+    let attempts = 0; // chances
     addEventListener('keypress', function (e) {
         if (isLetter(e.keyCode)) {
-            checkLetter(e.key.toUpperCase(), word, spans);
+            const isWrong = checkLetter(e.key.toUpperCase(), word, spans);
+            if (isWrong) {
+                attempts++;
+                gallowsTest(attempts);
+            }
         }
     })
 })
