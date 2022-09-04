@@ -28,6 +28,12 @@ function checkLetter(letter, word, spans) {
                 spans[i].textContent = letter;
             }
         }
+    } else if (!word.includes(letter) && !wrongLetters.includes(letter) ) {
+        wrongLetters.push(letter);
+        wrongLettersEl.innerHTML = '';
+        for (let i = 0; i < wrongLetters.length; i++) {
+            wrongLettersEl.innerHTML += '<span>' + wrongLetters[i] + '</span>';
+        }
     }
 }
 
