@@ -22,18 +22,26 @@ function isLetter(code) {
 
 function checkLetter(letter, word, spans) {
     if (word.includes(letter) && !rightLetters.includes(letter)) {
-        rightLetters.push(letter);
-        for (let i = 0; i < word.length; i++) {
-            if (word[i] == letter) {
-                spans[i].textContent = letter;
-            }
-        }
+        checkRightLetters(rightLetters, word, letter, spans)
     } else if (!word.includes(letter) && !wrongLetters.includes(letter) ) {
-        wrongLetters.push(letter);
-        wrongLettersEl.innerHTML = '';
-        for (let i = 0; i < wrongLetters.length; i++) {
-            wrongLettersEl.innerHTML += '<span>' + wrongLetters[i] + '</span>';
+        checkWrongLetters(wrongLetters, wrongLettersEl, letter);
+    }
+}
+
+function checkRightLetters(arrayLetters, word, letter, spans) { // checa letras corretas
+    arrayLetters.push(letter);
+    for (let i = 0; i < word.length; i++) {
+        if (word[i] == letter) {
+            spans[i].textContent = letter;
         }
+    }
+}
+
+function checkWrongLetters(arrayLetters, wrongLettersEl, letter) { // checa letras errdas
+    arrayLetters.push(letter);
+    wrongLettersEl.innerHTML = '';
+    for (let i = 0; i < arrayLetters.length; i++) {
+        wrongLettersEl.innerHTML += '<span>' + arrayLetters[i] + '</span>';
     }
 }
 
