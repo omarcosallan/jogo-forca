@@ -1,14 +1,26 @@
-let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT']; // palavras
+let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT'];
 let wrongLetters = [];
 let rightLetters = [];
+let attempts;
 
-const canvas = document.querySelector('canvas'); // canvas
+const start = document.getElementById('iniciar-jogo');
+let word = '';
+
+const canvas = document.querySelector('canvas');
 const brush = canvas.getContext('2d');
 brush.strokeStyle = '#0A3871';
 brush.lineWidth = 2;
 
 const boardEl = document.getElementById('palavra');
 const wrongLettersEl = document.getElementById('letras-erradas');
+
+function clearArray(array) {
+    while (array.length) {
+        array.pop();
+    }
+    wrongLettersEl.innerHTML = '<span></span>';
+}
+
 
 function board(word) {
     boardEl.innerHTML = '';
@@ -18,7 +30,7 @@ function board(word) {
 }
 
 function secretWord() {
-    return words[Math.floor(Math.random() * words.length)]; // retorna palavra secreta
+    return words[Math.floor(Math.random() * words.length)];
 }
 
 function isLetter(code) {
@@ -34,7 +46,7 @@ function checkLetter(letter, word, spans) {
     }
 }
 
-function checkRightLetters(arrayLetters, word, letter, spans) { // checa letras corretas
+function checkRightLetters(arrayLetters, word, letter, spans) {
     arrayLetters.push(letter);
     for (let i = 0; i < word.length; i++) {
         if (word[i] == letter) {
@@ -43,7 +55,7 @@ function checkRightLetters(arrayLetters, word, letter, spans) { // checa letras 
     }
 }
 
-function checkWrongLetters(arrayLetters, wrongLettersEl, letter) { // checa letras errdas
+function checkWrongLetters(arrayLetters, wrongLettersEl, letter) {
     arrayLetters.push(letter);
     wrongLettersEl.innerHTML = '';
     for (let i = 0; i < arrayLetters.length; i++) {
@@ -55,7 +67,6 @@ function clearCanvas() {
     brush.clearRect(0, 0, 600, 300);
 }
 
-//function desenha froca
 function drawGallows() {
     clearCanvas();
 
@@ -78,46 +89,42 @@ function drawHead() {
     brush.stroke();
 }
 
-function drawLine(xStar, yStart, xFinal, yFinal) { // desenhas braços, pernas e corpo
+function drawLine(xStar, yStart, xFinal, yFinal) {
     brush.beginPath();
     brush.moveTo(xStar, yStart);
     brush.lineTo(xFinal, yFinal);
     brush.stroke();
 }
 
-function gallowsTest(attempts) { // testa quantidade de erros e desenha elemento da forca
+function gallowsTest(attempts) {
     switch (attempts) {
         case 0:
             drawGallows();
             break;
         case 1:
-            drawHead(); // cabeça
+            drawHead();
             break;
         case 2:
-            drawLine(380, 155, 380, 210);   // corpo
+            drawLine(380, 155, 380, 210);
             break;
         case 3:
-            drawLine(380, 155, 350, 175);   // braço esquerdo
+            drawLine(380, 155, 350, 175);
             break;
         case 4:
-            drawLine(380, 155, 410, 175);   // braço direito
+            drawLine(380, 155, 410, 175);
             break;
         case 5:
-            drawLine(380, 210, 350, 230);   // perna esquerda
+            drawLine(380, 210, 350, 230);
             break;
         case 6:
-            drawLine(380, 210, 410, 230);   // perna direita
+            drawLine(380, 210, 410, 230);
             break;
     }
 }
 
-document.getElementById('iniciar-jogo').addEventListener('click', function () {
-    const word = secretWord();
-    board(word);
-    drawGallows();
-    wrongLetters.innerHTML = '';
+start.addEventListener('click', function () {
+    newGame();
     const spans = document.querySelectorAll('span');
-    let attempts = 0; // chances
     addEventListener('keypress', function (e) {
         if (isLetter(e.keyCode)) {
             const isWrong = checkLetter(e.key.toUpperCase(), word, spans);
@@ -127,4 +134,15 @@ document.getElementById('iniciar-jogo').addEventListener('click', function () {
             }
         }
     })
+    start.addEventListener('click', function () {
+        location.reload()
+    })
 })
+
+function newGame() {
+    start.innerText = 'Novo jogo';
+    word = secretWord();
+    board(word);
+    drawGallows();
+    attempts = 0;
+}
