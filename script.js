@@ -1,10 +1,12 @@
-let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT'];
+let words = ['JAVA', 'PHP', 'PYTHON', 'JAVASCRIPT', 'C', 'RUBY', 'KOTLIN', 'GOLANG'];
 let wrongLetters = [];
 let rightLetters = [];
 let attempts;
 let correct;
+let endGame = false;
 
-const start = document.getElementById('iniciar-jogo');
+const btnStart = document.getElementById('iniciar-jogo');
+const btnNewWord = document.getElementById('nova-palavra');
 let word = '';
 
 const canvas = document.querySelector('canvas');
@@ -22,7 +24,6 @@ function clearArray(array) {
     wrongLettersEl.innerHTML = '<span></span>';
 }
 
-
 function board(word) {
     boardEl.innerHTML = '';
     for (let i = 0; i < word.length; i++) {
@@ -39,9 +40,10 @@ function isLetter(code) {
 }
 
 function checkLetter(letter, word, spans) {
-    if (attempts < 6 && !winner(word)) {
+    if (attempts < 6 && endGame == false) {
         if (word.includes(letter) && !rightLetters.includes(letter)) {
             checkRightLetters(rightLetters, word, letter, spans);
+            return false;
         } else if (!word.includes(letter) && !wrongLetters.includes(letter)) {
             checkWrongLetters(wrongLetters, wrongLettersEl, letter);
             return true;
@@ -63,7 +65,7 @@ function checkWrongLetters(arrayLetters, wrongLettersEl, letter) {
     arrayLetters.push(letter);
     wrongLettersEl.innerHTML = '';
     for (let i = 0; i < arrayLetters.length; i++) {
-        wrongLettersEl.innerHTML += '<span>' + arrayLetters[i] + '</span>';
+        wrongLettersEl.innerHTML += arrayLetters[i] + '    ';
     }
 }
 
@@ -126,28 +128,13 @@ function gallowsTest(attempts) {
     }
 }
 
-start.addEventListener('click', function () {
-    newGame();
-    const spans = document.querySelectorAll('span');
-    addEventListener('keypress', function (e) {
-        if (isLetter(e.keyCode)) {
-            const isWrong = checkLetter(e.key.toUpperCase(), word, spans);
-            if (isWrong) {
-                attempts++;
-                gallowsTest(attempts);
-            }
-            endGameTest(attempts, word);
-        }
-    })
-    start.addEventListener('click', function () {
-        location.reload()
-    })
-})
-
 function newGame() {
-    start.innerText = 'Novo jogo';
+    btnStart.innerText = 'Novo jogo';
     word = secretWord();
     board(word);
+    clearArray(wrongLetters);
+    clearArray(rightLetters);
+    endGame = false;
     drawGallows();
     attempts = 0;
     correct = 0;
@@ -165,6 +152,50 @@ function endGameTest(attempts, word) {
 
 function winner(word) {
     if (correct == word.length) {
-        return true;
+        return endGame = true;
     }
 }
+
+function addWord(word) {
+    if (!words.includes(word) && input.value != '') {
+        words.push(word);
+        alert('Palavra adicionada ao jogo.');
+    } else if (words.includes(word)) {
+        alert('Essa palavra já está no jogo. Digite outra.');
+    }
+}
+
+btnStart.addEventListener('click', function () {
+    newGame();
+    addEventListener('keypress', function (e) {
+        const spans = document.querySelectorAll('span');
+        if (isLetter(e.keyCode)) {
+            const isWrong = checkLetter(e.key.toUpperCase(), word, spans);
+            if (isWrong) {
+                attempts++;
+                gallowsTest(attempts);
+            }
+            endGameTest(attempts, word);
+        }
+    })
+})
+
+btnNewWord.addEventListener('click', function () {
+    const gameEls = document.querySelectorAll('div');
+    const input = document.querySelector('textarea');
+    for (let i = 0; i < gameEls.length; i++) {
+        gameEls[i].style.display = 'none';
+    }
+    
+    input.style.display = 'block';
+    const word = input.value.toUpperCase();
+
+    addWord(word);
+
+    btnStart.addEventListener('click', function () {
+        input.style.display = 'none';
+        for (let i = 0; i < gameEls.length; i++) {
+            gameEls[i].style.display = 'block';
+        }
+    })
+})
