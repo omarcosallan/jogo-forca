@@ -46,6 +46,23 @@ section {
     color: #495057;
 }
 
+textarea {
+    overflow: hidden;
+    resize: none;
+    font-size: 2em;
+    padding: 180px 10px;
+    color: #495057;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+}
+
+textarea::placeholder {
+    color: #0A3871;
+}
+
 button {
     border: 1px solid #0A3871;
     border-radius: 1em;
